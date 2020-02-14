@@ -107,8 +107,6 @@ $('#save').click(()=> {
     });
 
     }
-    
-    
 
 })
 
@@ -123,29 +121,13 @@ db.collection('users').orderBy("Name").onSnapshot(doc =>{
         let firstCell = row.insertCell(0)
         let secoundCell = row.insertCell(1)
         let thirdCell = row.insertCell(2)
+        let fourthCell = row.insertCell(3)
+        // let fourthCell = row.insertCell(3)
         let str = String(item.data().Email)
         let mail = ""
+        let detail = String(item.data().Detail);
         let id = item.id;
-let fourthCell = row.insertCell(3)
-
-fourthCell.textContent = 'X'
         
-        firstCell.addEventListener('click',function(){
-            
-            console.log('oh');
-            $("#myModal").modal();
-            document.querySelector('#mt').textContent = item.data().Name;
-            document.querySelector('#mb').textContent = detail;
-            
-            
-        });
-
-        fourthCell.addEventListener('click',function(){
-            
-            console.log(id);
-            db.collection('users').doc(id).delete(); 
-            
-        });
         for (let i = 0; i < str.length; i++) {
             if (i==0||str[i]=='@'||str[i]=='.') {
                 mail += str[i]
@@ -154,7 +136,8 @@ fourthCell.textContent = 'X'
             }
             
         }
-        firstCell.textContent = item.data().Name
+        firstCell.textContent = item.data().Name;
+        
         if(item.data().Gender == 1){
             secoundCell.textContent = "Male";
             M++;
@@ -166,18 +149,37 @@ fourthCell.textContent = 'X'
             O++;
         }
         thirdCell.textContent = mail
+        fourthCell.textContent = 'X'
+        
+        firstCell.addEventListener('click',function(){
+            
+            console.log('oh');
+            $("#myModal").modal();
+            document.querySelector('#mt').textContent = firstCell.textContent;
+            document.querySelector('#mb').textContent = detail;
+            
+            
+        });
+
+        fourthCell.addEventListener('click',function(){
+            
+            console.log(id);
+            db.collection('users').doc(id).delete(); 
+            
+        });
         // gpa += (item.data().grade * item.data().credit)
         // credit += item.data().credit
+
+        let MP = ((M/(M+F+O))*100).toFixed(1);
+        let  FP = ((F/(M+F+O))*100).toFixed(1);
+        let  OP = ((O/(M+F+O))*100).toFixed(1);
+        
 
         console.log(M)
 
         //chart
-        let P = (M+F+O)/100;
-    console.log(M/P)
-    console.log(F)
-    console.log(O)
-    console.log(P)
-        let options = {
+
+        let chart = {
             title: {
                 text: "User Gender Ratio in Website"
             },
@@ -188,36 +190,38 @@ fourthCell.textContent = 'X'
             data: [{
                 type: "pie",
                 startAngle: 40,
-                toolTipContent: "<b>{label}</b>: {y}%",
+                toolTipContent: "<b>{label}</b> ",
                 showInLegend: "true",
                 legendText: "{label}",
                 indexLabelFontSize: 16,
-                indexLabel: "{label}  - {y}",
+                indexLabel: "{label}  - {y} %",
+                
                 dataPoints: [
-                    { y: M/P, label: "Male" },
-                    { y: F/P, label: "Female" },
+                    { y: MP, label: "Male" },
+                    { y: FP, label: "Female" },
                     // { y: 1.49, label: "Windows 8" },
                     // { y: 6.98, label: "Windows XP" },
                     // { y: 6.53, label: "Windows 8.1" },
                     // { y: 2.45, label: "Linux" },
                     // { y: 3.32, label: "Mac OS X 10.12" },
-                    { y: O/P, label: "Others" }
-                ]
+                    { y: OP, label: "Others" }
+                ],
+                
             }]
         };
-        $("#chartContainer").CanvasJSChart(options);
+        $("#chartContainer").CanvasJSChart(chart);
         
 
   
     })
-    
     // console.log(gpa/credit)
-    // M = 0;
-    // F = 0;
-    // O = 0;
+    M = 0;
+    F = 0;
+    O = 0;
 
     // $('h4').text(gpa/credit)
 })
+
 
 
 
