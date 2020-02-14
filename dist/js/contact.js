@@ -152,11 +152,11 @@ db.collection('users').orderBy("Name").onSnapshot(doc =>{
         console.log(M)
 
         //chart
-    //     let P = (M+F+O)/100;
-    // console.log(M/P)
-    // console.log(F)
-    // console.log(O)
-    // console.log(P)
+        let P = (M+F+O)/100;
+    console.log(M/P)
+    console.log(F)
+    console.log(O)
+    console.log(P)
         let options = {
             title: {
                 text: "User Gender Ratio in Website"
